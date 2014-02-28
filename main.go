@@ -17,6 +17,10 @@ const countMult = 1000 * 1000
 const arrSize = 10
 const msgSize = 64
 
+type runner interface {
+	run()
+}
+
 type msgArr struct {
 	a [arrSize]msg
 }
@@ -51,4 +55,11 @@ func lockToThread() {
 		return
 	}
 	runtime.LockOSThread()
+}
+
+func runRunner(r runner) {
+	go func() {
+		lockToThread()
+		r.run()
+	}()
 }

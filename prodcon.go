@@ -9,8 +9,8 @@ func prodcon() {
 	cb := make(chan bool)
 	f := &producer{consumer: ct}
 	t := &consumer{producer: ct, fin: cb}
-	go f.run()
-	go t.run()
+	runRunner(f)
+	runRunner(t)
 	<-cb
 }
 
@@ -19,7 +19,6 @@ type producer struct {
 }
 
 func (p *producer) run() {
-	lockToThread()
 	lim := *msgCount * countMult
 	var buf msgArr
 	for i := 1; i < lim; i++ {
@@ -40,7 +39,6 @@ type consumer struct {
 }
 
 func (c *consumer) run() {
-	lockToThread()
 	var comp msgArr
 	s := time.Now()
 	count := 0
